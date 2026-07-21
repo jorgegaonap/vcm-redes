@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>La burbuja de las teorías conspirativas</title>
+<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+<style>
+  html, body { margin:0; padding:0; height:100%; font-family: -apple-system, Arial, sans-serif; }
+  #contenedor { position: relative; width:100%; height:100vh; background:#ffffff; }
+  #red { width:100%; height:100%; }
+  #overlay {
+    position:absolute; top:16px; left:16px; right:16px;
+    text-align:center; pointer-events:none; z-index:10;
+  }
+  #titulo {
+    font-size: 26px; font-weight: 800; color:#121212;
+    margin-bottom:6px;
+  }
+  #subtitulo {
+    font-size:16px; color:#555555;
+  }
+  #stat {
+    display:inline-block; margin-top:10px; padding:8px 18px;
+    background:#111111; color:#ffffff; font-size:20px; font-weight:700;
+    border-radius:6px; pointer-events:auto;
+  }
+  #panelClic {
+    position:absolute; bottom:18px; left:50%; transform:translateX(-50%);
+    background:#fff3cd; border:2px solid #e0a800; border-radius:8px;
+    padding:10px 20px; font-size:16px; font-weight:600; color:#5c4400;
+    display:none; z-index:10; text-align:center; max-width:82%;
+  }
+  #reiniciar {
+    position:absolute; top:16px; right:16px; z-index:10;
+    padding:8px 14px; font-size:14px; cursor:pointer;
+    border:1px solid #999; background:#ffffff; border-radius:6px;
+    display:none;
+  }
+  #leyenda {
+    position:absolute; bottom:18px; right:18px; z-index:10;
+    font-size:13px; color:#333; background:rgba(255,255,255,0.92);
+    padding:8px 12px; border-radius:6px; border:1px solid #ddd;
+    max-width:220px;
+  }
+  .punto { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; }
+</style>
+</head>
+<body>
+<div id="contenedor">
+  <div id="overlay">
+    <div id="titulo">Cada burbuja escucha casi solo sus propias voces</div>
+    <div id="subtitulo">Haz clic en un punto para ver <b>solo</b> lo que esa persona ve en su feed</div>
+    <div id="stat">Solo 3.8% de las conexiones cruzan entre ambas comunidades</div>
+  </div>
+  <button id="reiniciar" onclick="reiniciarVista()">← Ver todo de nuevo</button>
+  <div id="red"></div>
+  <div id="panelClic"></div>
+  <div id="leyenda">
+    <div><span class="punto" style="background:#8E44AD"></span>Comunidad de teorías conspirativas</div>
+    <div><span class="punto" style="background:#2E86C1"></span>Resto de usuarios</div>
+    <div><span class="punto" style="background:#444444"></span>Puente entre comunidades</div>
+  </div>
+</div>
+
+<script>
+const nodesData = [{"id": "A1", "label": "Teor\u00eda\nalternativa", "shape": "box", "group": "A", "color": {"background": "#8E44AD", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Comunidad de teor\u00edas conspirativas"}, {"id": "A2", "label": "Fuente\nno oficial", "shape": "box", "group": "A", "color": {"background": "#8E44AD", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Comunidad de teor\u00edas conspirativas"}, {"id": "A3", "label": "Dato sin\nverificar", "shape": "box", "group": "A", "color": {"background": "#8E44AD", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Comunidad de teor\u00edas conspirativas"}, {"id": "A4", "label": "Video\nviral", "shape": "box", "group": "A", "color": {"background": "#8E44AD", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Comunidad de teor\u00edas conspirativas"}, {"id": "A5", "label": "Canal\nalternativo", "shape": "box", "group": "A", "color": {"background": "#8E44AD", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Comunidad de teor\u00edas conspirativas"}, {"id": "A6", "label": "Desconfianza\nen medios", "shape": "box", "group": "A", "color": {"background": "#8E44AD", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Comunidad de teor\u00edas conspirativas"}, {"id": "A7", "label": "Explicaci\u00f3n\noculta", "shape": "box", "group": "A", "color": {"background": "#8E44AD", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Comunidad de teor\u00edas conspirativas"}, {"id": "A8", "label": "Rumor\ncirculando", "shape": "box", "group": "A", "color": {"background": "#8E44AD", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Comunidad de teor\u00edas conspirativas"}, {"id": "A9", "label": "Grupo\ncerrado", "shape": "box", "group": "A", "color": {"background": "#8E44AD", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Comunidad de teor\u00edas conspirativas"}, {"id": "B1", "label": "Fuente\noficial", "shape": "box", "group": "B", "color": {"background": "#2E86C1", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Resto de usuarios"}, {"id": "B2", "label": "Medio\nverificado", "shape": "box", "group": "B", "color": {"background": "#2E86C1", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Resto de usuarios"}, {"id": "B3", "label": "Dato\ncontrastado", "shape": "box", "group": "B", "color": {"background": "#2E86C1", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Resto de usuarios"}, {"id": "B4", "label": "Estudio\ncient\u00edfico", "shape": "box", "group": "B", "color": {"background": "#2E86C1", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Resto de usuarios"}, {"id": "B5", "label": "Noticia\nconfirmada", "shape": "box", "group": "B", "color": {"background": "#2E86C1", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Resto de usuarios"}, {"id": "B6", "label": "Canal\ninformativo", "shape": "box", "group": "B", "color": {"background": "#2E86C1", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Resto de usuarios"}, {"id": "B7", "label": "Reportaje\nverificado", "shape": "box", "group": "B", "color": {"background": "#2E86C1", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Resto de usuarios"}, {"id": "B8", "label": "Fuente\nacad\u00e9mica", "shape": "box", "group": "B", "color": {"background": "#2E86C1", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Resto de usuarios"}, {"id": "B9", "label": "Explicaci\u00f3n\nest\u00e1ndar", "shape": "box", "group": "B", "color": {"background": "#2E86C1", "border": "#222222"}, "font": {"color": "#ffffff", "size": 13, "align": "center"}, "margin": 8, "title": "Resto de usuarios"}];
+const edgesData = [{"id": 0, "from": "A1", "to": "A2", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 1, "from": "A1", "to": "A3", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 2, "from": "A1", "to": "A5", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 3, "from": "A1", "to": "A6", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 4, "from": "A1", "to": "A7", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 5, "from": "A1", "to": "A8", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 6, "from": "A1", "to": "A9", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 7, "from": "A2", "to": "A3", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 8, "from": "A2", "to": "A4", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 9, "from": "A2", "to": "A5", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 10, "from": "A2", "to": "A6", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 11, "from": "A2", "to": "A7", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 12, "from": "A2", "to": "A9", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 13, "from": "A3", "to": "A4", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 14, "from": "A3", "to": "A5", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 15, "from": "A3", "to": "A7", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 16, "from": "A3", "to": "A8", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 17, "from": "A3", "to": "B6", "color": "#444444", "width": 5, "puente": true}, {"id": 18, "from": "A4", "to": "A5", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 19, "from": "A4", "to": "A7", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 20, "from": "A4", "to": "A8", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 21, "from": "A4", "to": "A9", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 22, "from": "A5", "to": "A6", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 23, "from": "A5", "to": "A8", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 24, "from": "A5", "to": "A9", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 25, "from": "A6", "to": "A7", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 26, "from": "A6", "to": "A8", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 27, "from": "A6", "to": "A9", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 28, "from": "A7", "to": "A8", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 29, "from": "A7", "to": "A9", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 30, "from": "A8", "to": "A9", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 31, "from": "A9", "to": "B4", "color": "#444444", "width": 5, "puente": true}, {"id": 32, "from": "B1", "to": "B3", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 33, "from": "B1", "to": "B4", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 34, "from": "B1", "to": "B5", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 35, "from": "B1", "to": "B6", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 36, "from": "B1", "to": "B7", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 37, "from": "B2", "to": "B3", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 38, "from": "B2", "to": "B4", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 39, "from": "B2", "to": "B5", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 40, "from": "B2", "to": "B8", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 41, "from": "B3", "to": "B4", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 42, "from": "B3", "to": "B5", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 43, "from": "B3", "to": "B7", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 44, "from": "B3", "to": "B8", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 45, "from": "B3", "to": "B9", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 46, "from": "B4", "to": "B7", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 47, "from": "B4", "to": "B9", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 48, "from": "B5", "to": "B7", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 49, "from": "B5", "to": "B8", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 50, "from": "B5", "to": "B9", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 51, "from": "B6", "to": "B9", "color": "#BBBBBB", "width": 1.5, "puente": false}, {"id": 52, "from": "B7", "to": "B9", "color": "#BBBBBB", "width": 1.5, "puente": false}];
+
+const nodes = new vis.DataSet(nodesData);
+const edges = new vis.DataSet(edgesData);
+
+const container = document.getElementById('red');
+const data = { nodes: nodes, edges: edges };
+const options = {
+  physics: {
+    barnesHut: { gravitationalConstant: -9000, centralGravity: 0.2,
+                   springLength: 190, springConstant: 0.02, damping: 0.85 },
+    stabilization: { iterations: 250 }
+  },
+  interaction: { hover: true, tooltipDelay: 100 },
+  nodes: { borderWidth: 2 },
+};
+const network = new vis.Network(container, data, options);
+
+function grupoDe(id) {
+  const n = nodes.get(id);
+  return n ? n.group : null;
+}
+
+function nombreGrupo(grupo) {
+  return grupo === 'A' ? "Comunidad de teorías conspirativas" : "Resto de usuarios";
+}
+
+network.on("click", function(params) {
+  if (params.nodes.length === 0) {
+    reiniciarVista();
+    return;
+  }
+  const idClic = params.nodes[0];
+  const grupo = grupoDe(idClic);
+  const nombre = nombreGrupo(grupo);
+
+  const nodosMismoGrupo = nodesData.filter(n => n.group === grupo).map(n => n.id);
+
+  const nodesUpdate = nodesData.map(n => {
+    const enGrupo = n.group === grupo;
+    return {
+      id: n.id,
+      color: enGrupo
+        ? { background: n.color.background, border: '#222222' }
+        : { background: '#EDEDED', border: '#DDDDDD' },
+      font: { color: enGrupo ? '#ffffff' : '#BBBBBB' }
+    };
+  });
+  nodes.update(nodesUpdate);
+
+  const edgesUpdate = edgesData.map(e => {
+    const dentro = nodosMismoGrupo.includes(e.from) && nodosMismoGrupo.includes(e.to);
+    return {
+      id: e.id,
+      color: dentro ? e.color : '#F2F2F2',
+      width: dentro ? e.width : 1
+    };
+  });
+  edges.update(edgesUpdate);
+
+  const nodoClic = nodesData.find(n => n.id === idClic);
+  const etiquetaClic = nodoClic.label.replace(/\n/g, ' ');
+  const panel = document.getElementById('panelClic');
+  panel.style.display = 'block';
+  panel.innerHTML = '👀 Alguien interesado en "<b>' + etiquetaClic + '</b>" está en: <b>' + nombre + '</b>. ' +
+    'Esto es casi todo lo que ve en su feed — el otro grupo casi no aparece.';
+
+  document.getElementById('reiniciar').style.display = 'block';
+});
+
+function reiniciarVista() {
+  nodes.update(nodesData);
+  edges.update(edgesData);
+  document.getElementById('panelClic').style.display = 'none';
+  document.getElementById('reiniciar').style.display = 'none';
+}
+</script>
+</body>
+</html>
