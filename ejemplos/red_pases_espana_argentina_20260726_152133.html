@@ -1,0 +1,220 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 700px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+<div style="text-align:center; font-family:sans-serif; padding:10px;">
+  <h2 style="margin-bottom:2px;">Red de pases simulada — España vs Argentina</h2>
+  <p style="color:#555; margin:4px 0 10px 0;">
+    Datos SIMULADOS con fines pedagógicos.
+  </p>
+  <ul style="display:inline-block; text-align:left; color:#333; font-size:14px; margin:0;">
+    <li><b>Número sobre cada arista</b>: cantidad de pases simulados entre esos dos jugadores (peso de la arista en la matriz de adyacencia).</li>
+    <li><b>Grosor de la arista</b>: mismo valor que el número, representado visualmente (a más pases, línea más gruesa).</li>
+    <li><b>Tamaño del nodo</b>: <i>grado ponderado</i> del jugador = suma de los pesos de todas sus aristas, es decir, el total de pases simulados en los que participó (dando o recibiendo). No es cuántos compañeros distintos tiene, sino cuánto pasó el balón por él.</li>
+    <li><b>Líneas punteadas naranjas</b>: interacción cruzada entre equipos (duelos/recuperaciones simuladas, no pases reales entre rivales).</li>
+    <li><b>Arrastra un nodo</b> para moverlo libremente (parte de una posición inicial por formación, pero no queda fijo).</li>
+    <li><b>Haz click en un nodo</b> para resaltarlo junto a sus conexiones; el resto del grafo se atenúa. Click en el fondo para restaurar la vista completa.</li>
+  </ul>
+</div>
+
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#C60B1E", "fixed": false, "font": {"color": "#222222"}, "id": "Sim\u00f3n", "label": "Sim\u00f3n", "physics": false, "shape": "dot", "size": 31.8, "title": "Sim\u00f3n (Espa\u00f1a, l\u00ednea POR)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 33", "x": -540, "y": 0}, {"color": "#C60B1E", "fixed": false, "font": {"color": "#222222"}, "id": "Carvajal", "label": "Carvajal", "physics": false, "shape": "dot", "size": 58.8, "title": "Carvajal (Espa\u00f1a, l\u00ednea DEF)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 78", "x": -360, "y": -180}, {"color": "#C60B1E", "fixed": false, "font": {"color": "#222222"}, "id": "Le Normand", "label": "Le Normand", "physics": false, "shape": "dot", "size": 49.8, "title": "Le Normand (Espa\u00f1a, l\u00ednea DEF)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 63", "x": -360, "y": -60}, {"color": "#C60B1E", "fixed": false, "font": {"color": "#222222"}, "id": "Laporte", "label": "Laporte", "physics": false, "shape": "dot", "size": 57.0, "title": "Laporte (Espa\u00f1a, l\u00ednea DEF)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 75", "x": -360, "y": 60}, {"color": "#C60B1E", "fixed": false, "font": {"color": "#222222"}, "id": "Cucurella", "label": "Cucurella", "physics": false, "shape": "dot", "size": 58.199999999999996, "title": "Cucurella (Espa\u00f1a, l\u00ednea DEF)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 77", "x": -360, "y": 180}, {"color": "#C60B1E", "fixed": false, "font": {"color": "#222222"}, "id": "Rodri", "label": "Rodri", "physics": false, "shape": "dot", "size": 57.0, "title": "Rodri (Espa\u00f1a, l\u00ednea MED)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 75", "x": -180, "y": 0}, {"color": "#C60B1E", "fixed": false, "font": {"color": "#222222"}, "id": "Pedri", "label": "Pedri", "physics": false, "shape": "dot", "size": 59.4, "title": "Pedri (Espa\u00f1a, l\u00ednea MED)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 79", "x": -180, "y": -150.0}, {"color": "#C60B1E", "fixed": false, "font": {"color": "#222222"}, "id": "Fabi\u00e1n Ruiz", "label": "Fabi\u00e1n Ruiz", "physics": false, "shape": "dot", "size": 66.6, "title": "Fabi\u00e1n Ruiz (Espa\u00f1a, l\u00ednea MED)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 91", "x": -180, "y": 150.0}, {"color": "#C60B1E", "fixed": false, "font": {"color": "#222222"}, "id": "Nico Williams", "label": "Nico Williams", "physics": false, "shape": "dot", "size": 35.4, "title": "Nico Williams (Espa\u00f1a, l\u00ednea ATA)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 39", "x": 0, "y": -240}, {"color": "#C60B1E", "fixed": false, "font": {"color": "#222222"}, "id": "Morata", "label": "Morata", "physics": false, "shape": "dot", "size": 33.599999999999994, "title": "Morata (Espa\u00f1a, l\u00ednea ATA)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 36", "x": 0, "y": 0}, {"color": "#C60B1E", "fixed": false, "font": {"color": "#222222"}, "id": "Yamal", "label": "Yamal", "physics": false, "shape": "dot", "size": 36.599999999999994, "title": "Yamal (Espa\u00f1a, l\u00ednea ATA)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 41", "x": 0, "y": 240}, {"color": "#75AADB", "fixed": false, "font": {"color": "#222222"}, "id": "Mart\u00ednez (GK)", "label": "Mart\u00ednez (GK)", "physics": false, "shape": "dot", "size": 28.2, "title": "Mart\u00ednez (GK) (Argentina, l\u00ednea POR)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 27", "x": 540, "y": 0}, {"color": "#75AADB", "fixed": false, "font": {"color": "#222222"}, "id": "Molina", "label": "Molina", "physics": false, "shape": "dot", "size": 43.8, "title": "Molina (Argentina, l\u00ednea DEF)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 53", "x": 360, "y": -180}, {"color": "#75AADB", "fixed": false, "font": {"color": "#222222"}, "id": "Otamendi", "label": "Otamendi", "physics": false, "shape": "dot", "size": 41.4, "title": "Otamendi (Argentina, l\u00ednea DEF)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 49", "x": 360, "y": -60}, {"color": "#75AADB", "fixed": false, "font": {"color": "#222222"}, "id": "Romero", "label": "Romero", "physics": false, "shape": "dot", "size": 46.8, "title": "Romero (Argentina, l\u00ednea DEF)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 58", "x": 360, "y": 60}, {"color": "#75AADB", "fixed": false, "font": {"color": "#222222"}, "id": "Tagliafico", "label": "Tagliafico", "physics": false, "shape": "dot", "size": 48.0, "title": "Tagliafico (Argentina, l\u00ednea DEF)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 60", "x": 360, "y": 180}, {"color": "#75AADB", "fixed": false, "font": {"color": "#222222"}, "id": "De Paul", "label": "De Paul", "physics": false, "shape": "dot", "size": 51.0, "title": "De Paul (Argentina, l\u00ednea MED)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 65", "x": 180, "y": -150.0}, {"color": "#75AADB", "fixed": false, "font": {"color": "#222222"}, "id": "Mac Allister", "label": "Mac Allister", "physics": false, "shape": "dot", "size": 52.199999999999996, "title": "Mac Allister (Argentina, l\u00ednea MED)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 67", "x": 180, "y": 0}, {"color": "#75AADB", "fixed": false, "font": {"color": "#222222"}, "id": "Enzo Fern\u00e1ndez", "label": "Enzo Fern\u00e1ndez", "physics": false, "shape": "dot", "size": 57.0, "title": "Enzo Fern\u00e1ndez (Argentina, l\u00ednea MED)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 75", "x": 180, "y": 150.0}, {"color": "#75AADB", "fixed": false, "font": {"color": "#222222"}, "id": "Di Mar\u00eda", "label": "Di Mar\u00eda", "physics": false, "shape": "dot", "size": 33.0, "title": "Di Mar\u00eda (Argentina, l\u00ednea ATA)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 35", "x": 30.0, "y": -240}, {"color": "#75AADB", "fixed": false, "font": {"color": "#222222"}, "id": "Juli\u00e1n \u00c1lvarez", "label": "Juli\u00e1n \u00c1lvarez", "physics": false, "shape": "dot", "size": 26.4, "title": "Juli\u00e1n \u00c1lvarez (Argentina, l\u00ednea ATA)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 24", "x": 30.0, "y": 0}, {"color": "#75AADB", "fixed": false, "font": {"color": "#222222"}, "id": "Messi", "label": "Messi", "physics": false, "shape": "dot", "size": 30.0, "title": "Messi (Argentina, l\u00ednea ATA)\u003cbr\u003eGrado ponderado (total de pases simulados en los que particip\u00f3): 30", "x": 30.0, "y": 240}]);
+                  edges = new vis.DataSet([{"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Sim\u00f3n", "label": "8", "title": "Pases simulados: 8", "to": "Carvajal", "value": 8}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Sim\u00f3n", "label": "5", "title": "Pases simulados: 5", "to": "Le Normand", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Sim\u00f3n", "label": "10", "title": "Pases simulados: 10", "to": "Laporte", "value": 10}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Sim\u00f3n", "label": "10", "title": "Pases simulados: 10", "to": "Cucurella", "value": 10}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Carvajal", "label": "14", "title": "Pases simulados: 14", "to": "Le Normand", "value": 14}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Carvajal", "label": "8", "title": "Pases simulados: 8", "to": "Laporte", "value": 8}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Carvajal", "label": "15", "title": "Pases simulados: 15", "to": "Cucurella", "value": 15}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Carvajal", "label": "5", "title": "Pases simulados: 5", "to": "Rodri", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Carvajal", "label": "12", "title": "Pases simulados: 12", "to": "Pedri", "value": 12}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Carvajal", "label": "12", "title": "Pases simulados: 12", "to": "Fabi\u00e1n Ruiz", "value": 12}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Carvajal", "label": "2", "title": "Pases simulados: 2", "to": "Nico Williams", "value": 2}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Carvajal", "label": "2", "title": "Pases simulados: 2", "to": "Yamal", "value": 2}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Le Normand", "label": "14", "title": "Pases simulados: 14", "to": "Laporte", "value": 14}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Le Normand", "label": "12", "title": "Pases simulados: 12", "to": "Cucurella", "value": 12}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Le Normand", "label": "6", "title": "Pases simulados: 6", "to": "Rodri", "value": 6}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Le Normand", "label": "5", "title": "Pases simulados: 5", "to": "Pedri", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Le Normand", "label": "5", "title": "Pases simulados: 5", "to": "Fabi\u00e1n Ruiz", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Le Normand", "label": "2", "title": "Pases simulados: 2", "to": "Yamal", "value": 2}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Laporte", "label": "12", "title": "Pases simulados: 12", "to": "Cucurella", "value": 12}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Laporte", "label": "7", "title": "Pases simulados: 7", "to": "Rodri", "value": 7}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Laporte", "label": "6", "title": "Pases simulados: 6", "to": "Pedri", "value": 6}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Laporte", "label": "14", "title": "Pases simulados: 14", "to": "Fabi\u00e1n Ruiz", "value": 14}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Laporte", "label": "2", "title": "Pases simulados: 2", "to": "Nico Williams", "value": 2}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Laporte", "label": "2", "title": "Pases simulados: 2", "to": "Morata", "value": 2}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Cucurella", "label": "7", "title": "Pases simulados: 7", "to": "Rodri", "value": 7}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Cucurella", "label": "7", "title": "Pases simulados: 7", "to": "Pedri", "value": 7}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Cucurella", "label": "12", "title": "Pases simulados: 12", "to": "Fabi\u00e1n Ruiz", "value": 12}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Cucurella", "label": "2", "title": "Pases simulados: 2", "to": "Morata", "value": 2}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Rodri", "label": "12", "title": "Pases simulados: 12", "to": "Pedri", "value": 12}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Rodri", "label": "13", "title": "Pases simulados: 13", "to": "Fabi\u00e1n Ruiz", "value": 13}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Rodri", "label": "6", "title": "Pases simulados: 6", "to": "Nico Williams", "value": 6}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Rodri", "label": "12", "title": "Pases simulados: 12", "to": "Morata", "value": 12}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Rodri", "label": "4", "title": "Pases simulados: 4", "to": "Yamal", "value": 4}, {"color": "#F2A900", "dashes": true, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Rodri", "label": "3", "title": "Pases simulados: 3", "to": "Mac Allister", "value": 3}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Pedri", "label": "7", "title": "Pases simulados: 7", "to": "Fabi\u00e1n Ruiz", "value": 7}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Pedri", "label": "10", "title": "Pases simulados: 10", "to": "Nico Williams", "value": 10}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Pedri", "label": "4", "title": "Pases simulados: 4", "to": "Morata", "value": 4}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Pedri", "label": "12", "title": "Pases simulados: 12", "to": "Yamal", "value": 12}, {"color": "#F2A900", "dashes": true, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Pedri", "label": "4", "title": "Pases simulados: 4", "to": "De Paul", "value": 4}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Fabi\u00e1n Ruiz", "label": "12", "title": "Pases simulados: 12", "to": "Nico Williams", "value": 12}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Fabi\u00e1n Ruiz", "label": "4", "title": "Pases simulados: 4", "to": "Morata", "value": 4}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Fabi\u00e1n Ruiz", "label": "9", "title": "Pases simulados: 9", "to": "Yamal", "value": 9}, {"color": "#F2A900", "dashes": true, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Fabi\u00e1n Ruiz", "label": "3", "title": "Pases simulados: 3", "to": "Enzo Fern\u00e1ndez", "value": 3}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Nico Williams", "label": "4", "title": "Pases simulados: 4", "to": "Morata", "value": 4}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Nico Williams", "label": "3", "title": "Pases simulados: 3", "to": "Yamal", "value": 3}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Morata", "label": "6", "title": "Pases simulados: 6", "to": "Yamal", "value": 6}, {"color": "#F2A900", "dashes": true, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Morata", "label": "2", "title": "Pases simulados: 2", "to": "Otamendi", "value": 2}, {"color": "#F2A900", "dashes": true, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Yamal", "label": "3", "title": "Pases simulados: 3", "to": "Tagliafico", "value": 3}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Mart\u00ednez (GK)", "label": "8", "title": "Pases simulados: 8", "to": "Molina", "value": 8}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Mart\u00ednez (GK)", "label": "5", "title": "Pases simulados: 5", "to": "Otamendi", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Mart\u00ednez (GK)", "label": "9", "title": "Pases simulados: 9", "to": "Romero", "value": 9}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Mart\u00ednez (GK)", "label": "5", "title": "Pases simulados: 5", "to": "Tagliafico", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Molina", "label": "6", "title": "Pases simulados: 6", "to": "Otamendi", "value": 6}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Molina", "label": "12", "title": "Pases simulados: 12", "to": "Romero", "value": 12}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Molina", "label": "5", "title": "Pases simulados: 5", "to": "Tagliafico", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Molina", "label": "5", "title": "Pases simulados: 5", "to": "De Paul", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Molina", "label": "8", "title": "Pases simulados: 8", "to": "Mac Allister", "value": 8}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Molina", "label": "7", "title": "Pases simulados: 7", "to": "Enzo Fern\u00e1ndez", "value": 7}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Molina", "label": "2", "title": "Pases simulados: 2", "to": "Di Mar\u00eda", "value": 2}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Otamendi", "label": "5", "title": "Pases simulados: 5", "to": "Romero", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Otamendi", "label": "12", "title": "Pases simulados: 12", "to": "Tagliafico", "value": 12}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Otamendi", "label": "7", "title": "Pases simulados: 7", "to": "De Paul", "value": 7}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Otamendi", "label": "4", "title": "Pases simulados: 4", "to": "Mac Allister", "value": 4}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Otamendi", "label": "6", "title": "Pases simulados: 6", "to": "Enzo Fern\u00e1ndez", "value": 6}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Otamendi", "label": "2", "title": "Pases simulados: 2", "to": "Messi", "value": 2}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Romero", "label": "10", "title": "Pases simulados: 10", "to": "Tagliafico", "value": 10}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Romero", "label": "6", "title": "Pases simulados: 6", "to": "De Paul", "value": 6}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Romero", "label": "4", "title": "Pases simulados: 4", "to": "Mac Allister", "value": 4}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Romero", "label": "10", "title": "Pases simulados: 10", "to": "Enzo Fern\u00e1ndez", "value": 10}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Romero", "label": "2", "title": "Pases simulados: 2", "to": "Di Mar\u00eda", "value": 2}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Tagliafico", "label": "6", "title": "Pases simulados: 6", "to": "De Paul", "value": 6}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Tagliafico", "label": "9", "title": "Pases simulados: 9", "to": "Mac Allister", "value": 9}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Tagliafico", "label": "10", "title": "Pases simulados: 10", "to": "Enzo Fern\u00e1ndez", "value": 10}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "De Paul", "label": "8", "title": "Pases simulados: 8", "to": "Mac Allister", "value": 8}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "De Paul", "label": "8", "title": "Pases simulados: 8", "to": "Enzo Fern\u00e1ndez", "value": 8}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "De Paul", "label": "6", "title": "Pases simulados: 6", "to": "Di Mar\u00eda", "value": 6}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "De Paul", "label": "5", "title": "Pases simulados: 5", "to": "Juli\u00e1n \u00c1lvarez", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "De Paul", "label": "10", "title": "Pases simulados: 10", "to": "Messi", "value": 10}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Mac Allister", "label": "14", "title": "Pases simulados: 14", "to": "Enzo Fern\u00e1ndez", "value": 14}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Mac Allister", "label": "7", "title": "Pases simulados: 7", "to": "Di Mar\u00eda", "value": 7}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Mac Allister", "label": "5", "title": "Pases simulados: 5", "to": "Juli\u00e1n \u00c1lvarez", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Mac Allister", "label": "5", "title": "Pases simulados: 5", "to": "Messi", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Enzo Fern\u00e1ndez", "label": "6", "title": "Pases simulados: 6", "to": "Di Mar\u00eda", "value": 6}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Enzo Fern\u00e1ndez", "label": "5", "title": "Pases simulados: 5", "to": "Juli\u00e1n \u00c1lvarez", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Enzo Fern\u00e1ndez", "label": "6", "title": "Pases simulados: 6", "to": "Messi", "value": 6}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Di Mar\u00eda", "label": "7", "title": "Pases simulados: 7", "to": "Juli\u00e1n \u00c1lvarez", "value": 7}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Di Mar\u00eda", "label": "5", "title": "Pases simulados: 5", "to": "Messi", "value": 5}, {"color": "#999999", "dashes": false, "font": {"color": "#444444", "size": 11, "strokeColor": "#ffffff", "strokeWidth": 3}, "from": "Juli\u00e1n \u00c1lvarez", "label": "2", "title": "Pases simulados: 2", "to": "Messi", "value": 2}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+<script>
+(function () {
+  function attachHighlight() {
+    if (typeof network === 'undefined' || typeof nodes === 'undefined' || typeof edges === 'undefined') {
+      setTimeout(attachHighlight, 100);
+      return;
+    }
+
+    // Guardamos el color original de cada arista para no perder el
+    // naranja de los "duelos cruzados" al restaurar la opacidad.
+    var colorOriginalArista = {};
+    edges.getIds().forEach(function (id) {
+      colorOriginalArista[id] = edges.get(id).color;
+    });
+
+    function restaurarTodo() {
+      nodes.update(nodes.getIds().map(function (id) {
+        return { id: id, opacity: 1 };
+      }));
+      edges.update(edges.getIds().map(function (id) {
+        var base = colorOriginalArista[id] || {};
+        return { id: id, color: Object.assign({}, base, { opacity: 1 }) };
+      }));
+    }
+
+    network.on('click', function (params) {
+      if (params.nodes.length > 0) {
+        var seleccionado = params.nodes[0];
+        var nodosConectados = network.getConnectedNodes(seleccionado);
+        var aristasConectadas = network.getConnectedEdges(seleccionado);
+        var nodosResaltados = new Set(nodosConectados.concat([seleccionado]));
+
+        nodes.update(nodes.getIds().map(function (id) {
+          return { id: id, opacity: nodosResaltados.has(id) ? 1 : 0.12 };
+        }));
+        edges.update(edges.getIds().map(function (id) {
+          var base = colorOriginalArista[id] || {};
+          var conectada = aristasConectadas.indexOf(id) !== -1;
+          return { id: id, color: Object.assign({}, base, { opacity: conectada ? 1 : 0.06 }) };
+        }));
+      } else {
+        // Click en el fondo (nada seleccionado) -> restaurar todo
+        restaurarTodo();
+      }
+    });
+  }
+  attachHighlight();
+})();
+</script>
+</body>
+</html>
