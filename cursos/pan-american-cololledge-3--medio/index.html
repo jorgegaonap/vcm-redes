@@ -259,31 +259,12 @@ function highlightFilter(filter) {
              
 
              
-             /* position absolute is important and the container has to be relative or absolute as well. */
-          div.popup {
-                 position:absolute;
-                 top:0px;
-                 left:0px;
-                 display:none;
-                 background-color:#f5f4ed;
-                 -moz-border-radius: 3px;
-                 -webkit-border-radius: 3px;
-                 border-radius: 3px;
-                 border: 1px solid #808074;
-                 box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
-          }
-
-          /* hide the original tooltip */
-          .vis-tooltip {
-            display:none;
-          }
-             
         </style>
     </head>
 
 
     <body>
-<div style="text-align:center;font-family:sans-serif;font-size:20px;font-weight:bold;color:#121212;padding:12px 0;">Liceo Santa Teresa de los Andes · 2° medio · 1 persona(s) · 5 canciones únicas</div>
+<div style="text-align:center;font-family:sans-serif;font-size:20px;font-weight:bold;color:#121212;padding:12px 0;">Pan American Cololledge · 3° medio · 1 persona(s) · 5 canciones únicas</div>
         <div class="card" style="width: 100%">
             
             
@@ -322,8 +303,8 @@ function highlightFilter(filter) {
                   
 
                   // parsing and collecting nodes and edges from the python
-                  nodes = new vis.DataSet([{"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "spotify:track:7tI8dRuH2Yc6RuoTjxo4dU", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02f02c451189a709b9a952aaec", "label": "Who (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eWho\u003c/b\u003e\u003cbr\u003eJimin\u003cbr\u003en = 1\u003cbr\u003e\u003ca href=\u0027https://open.spotify.com/track/7tI8dRuH2Yc6RuoTjxo4dU\u0027 target=\u0027_blank\u0027 rel=\u0027noopener\u0027\u003eAbrir en Spotify\u003c/a\u003e", "x": 156.92432518870035, "y": 92.23780407186631}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "spotify:track:2YaOGEaBCoISE521kunnyK", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02844283dba279ee545aafb022", "label": "Luci\u00e9rnagas (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eLuci\u00e9rnagas\u003c/b\u003e\u003cbr\u003eMilo j, Silvio Rodr\u00edguez\u003cbr\u003en = 1\u003cbr\u003e\u003ca href=\u0027https://open.spotify.com/track/2YaOGEaBCoISE521kunnyK\u0027 target=\u0027_blank\u0027 rel=\u0027noopener\u0027\u003eAbrir en Spotify\u003c/a\u003e", "x": 78.46216259435018, "y": 149.24390203593316}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "spotify:track:58cLm4PaHNt8DDr9ayZnNz", "image": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02a8659bf75fee7dc8c01afc67", "label": "Doma (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eDoma\u003c/b\u003e\u003cbr\u003eJ\u00f3sean Log\u003cbr\u003en = 1\u003cbr\u003e\u003ca href=\u0027https://open.spotify.com/track/58cLm4PaHNt8DDr9ayZnNz\u0027 target=\u0027_blank\u0027 rel=\u0027noopener\u0027\u003eAbrir en Spotify\u003c/a\u003e", "x": 126.9544459084792, "y": -0.0}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "spotify:track:7CMj1OOS1ho4CPEQTFKzcN", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e028eecda5e1e3b66578c162938", "label": "QLOO* (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eQLOO*\u003c/b\u003e\u003cbr\u003eYoung Cister, Kreamly\u003cbr\u003en = 1\u003cbr\u003e\u003ca href=\u0027https://open.spotify.com/track/7CMj1OOS1ho4CPEQTFKzcN\u0027 target=\u0027_blank\u0027 rel=\u0027noopener\u0027\u003eAbrir en Spotify\u003c/a\u003e", "x": 0.0, "y": 92.23780407186631}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "spotify:track:2SPBFiD8iITb8CKJGz1TEQ", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0283ef0552896ff6e817754c74", "label": "111 (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003e111\u003c/b\u003e\u003cbr\u003eYan Block\u003cbr\u003en = 1\u003cbr\u003e\u003ca href=\u0027https://open.spotify.com/track/2SPBFiD8iITb8CKJGz1TEQ\u0027 target=\u0027_blank\u0027 rel=\u0027noopener\u0027\u003eAbrir en Spotify\u003c/a\u003e", "x": 29.96987928022115, "y": -0.0}]);
-                  edges = new vis.DataSet([{"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "spotify:track:7tI8dRuH2Yc6RuoTjxo4dU", "label": null, "to": "spotify:track:2YaOGEaBCoISE521kunnyK", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "spotify:track:7tI8dRuH2Yc6RuoTjxo4dU", "label": null, "to": "spotify:track:58cLm4PaHNt8DDr9ayZnNz", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "spotify:track:7tI8dRuH2Yc6RuoTjxo4dU", "label": null, "to": "spotify:track:7CMj1OOS1ho4CPEQTFKzcN", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "spotify:track:7tI8dRuH2Yc6RuoTjxo4dU", "label": null, "to": "spotify:track:2SPBFiD8iITb8CKJGz1TEQ", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "spotify:track:2YaOGEaBCoISE521kunnyK", "label": null, "to": "spotify:track:58cLm4PaHNt8DDr9ayZnNz", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "spotify:track:2YaOGEaBCoISE521kunnyK", "label": null, "to": "spotify:track:7CMj1OOS1ho4CPEQTFKzcN", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "spotify:track:2YaOGEaBCoISE521kunnyK", "label": null, "to": "spotify:track:2SPBFiD8iITb8CKJGz1TEQ", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "spotify:track:58cLm4PaHNt8DDr9ayZnNz", "label": null, "to": "spotify:track:7CMj1OOS1ho4CPEQTFKzcN", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "spotify:track:58cLm4PaHNt8DDr9ayZnNz", "label": null, "to": "spotify:track:2SPBFiD8iITb8CKJGz1TEQ", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "spotify:track:7CMj1OOS1ho4CPEQTFKzcN", "label": null, "to": "spotify:track:2SPBFiD8iITb8CKJGz1TEQ", "value": 1, "width": 0.6}]);
+                  nodes = new vis.DataSet([{"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:2pOyQcM91HM3tZEiwZCraG", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e022923891706de75053884676c", "label": "LA NAVE DEL OLVIDO (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eLA NAVE DEL OLVIDO\u003c/b\u003e\u003cbr\u003eJOSE JOSE\u003cbr\u003en = 1", "x": 126.9544459084792, "y": -0.0}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:1jBMT7YNoqPaG67H3FYljs", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02f0344ec5b9e458bd83772e71", "label": "AMAR Y QUERER (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eAMAR Y QUERER\u003c/b\u003e\u003cbr\u003eJOSE JOSE\u003cbr\u003en = 1", "x": 0.0, "y": 92.23780407186631}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:6KFtD3Ik5ESG35G7p0ArSL", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e024fda4076ffdb1786adc9ccb0", "label": "CONDUCTOR (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eCONDUCTOR\u003c/b\u003e\u003cbr\u003eCHICO TRIJILLO\u003cbr\u003en = 1", "x": 29.96987928022115, "y": -0.0}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:1cOboCuWYI2osTOfolMRS6", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e021841b15585341c98f761d252", "label": "TU BODA (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eTU BODA\u003c/b\u003e\u003cbr\u003eOSCAR BAIDON\u003cbr\u003en = 1", "x": 156.92432518870035, "y": 92.23780407186631}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:5XWfwjzFNl2pTB737fx7qr", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0210f6d644b06f0c01aafd6006", "label": "EL GRAN BARON (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eEL GRAN BARON\u003c/b\u003e\u003cbr\u003eWILLIE COLON\u003cbr\u003en = 1", "x": 78.46216259435018, "y": 149.24390203593316}]);
+                  edges = new vis.DataSet([{"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:2pOyQcM91HM3tZEiwZCraG", "label": null, "to": "manual:1jBMT7YNoqPaG67H3FYljs", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:2pOyQcM91HM3tZEiwZCraG", "label": null, "to": "manual:6KFtD3Ik5ESG35G7p0ArSL", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:2pOyQcM91HM3tZEiwZCraG", "label": null, "to": "manual:1cOboCuWYI2osTOfolMRS6", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:2pOyQcM91HM3tZEiwZCraG", "label": null, "to": "manual:5XWfwjzFNl2pTB737fx7qr", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:1jBMT7YNoqPaG67H3FYljs", "label": null, "to": "manual:6KFtD3Ik5ESG35G7p0ArSL", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:1jBMT7YNoqPaG67H3FYljs", "label": null, "to": "manual:1cOboCuWYI2osTOfolMRS6", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:1jBMT7YNoqPaG67H3FYljs", "label": null, "to": "manual:5XWfwjzFNl2pTB737fx7qr", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:6KFtD3Ik5ESG35G7p0ArSL", "label": null, "to": "manual:1cOboCuWYI2osTOfolMRS6", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:6KFtD3Ik5ESG35G7p0ArSL", "label": null, "to": "manual:5XWfwjzFNl2pTB737fx7qr", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:1cOboCuWYI2osTOfolMRS6", "label": null, "to": "manual:5XWfwjzFNl2pTB737fx7qr", "value": 1, "width": 0.6}]);
 
                   nodeColors = {};
                   allNodes = nodes.get({ returnType: "Object" });
@@ -347,68 +328,6 @@ function highlightFilter(filter) {
 
                   
 
-                  
-                  // make a custom popup
-                      var popup = document.createElement("div");
-                      popup.className = 'popup';
-                      popupTimeout = null;
-                      popup.addEventListener('mouseover', function () {
-                          console.log(popup)
-                          if (popupTimeout !== null) {
-                              clearTimeout(popupTimeout);
-                              popupTimeout = null;
-                          }
-                      });
-                      popup.addEventListener('mouseout', function () {
-                          if (popupTimeout === null) {
-                              hidePopup();
-                          }
-                      });
-                      container.appendChild(popup);
-
-
-                      // use the popup event to show
-                      network.on("showPopup", function (params) {
-                          showPopup(params);
-                      });
-
-                      // use the hide event to hide it
-                      network.on("hidePopup", function (params) {
-                          hidePopup();
-                      });
-
-                      // hiding the popup through css
-                      function hidePopup() {
-                          popupTimeout = setTimeout(function () { popup.style.display = 'none'; }, 500);
-                      }
-
-                      // showing the popup
-                      function showPopup(nodeId) {
-                          // get the data from the vis.DataSet
-                          var nodeData = nodes.get([nodeId]);
-                          popup.innerHTML = nodeData[0].title;
-
-                          // get the position of the node
-                          var posCanvas = network.getPositions([nodeId])[nodeId];
-
-                          // get the bounding box of the node
-                          var boundingBox = network.getBoundingBox(nodeId);
-
-                          //position tooltip:
-                          posCanvas.x = posCanvas.x + 0.5 * (boundingBox.right - boundingBox.left);
-
-                          // convert coordinates to the DOM space
-                          var posDOM = network.canvasToDOM(posCanvas);
-
-                          // Give it an offset
-                          posDOM.x += 10;
-                          posDOM.y -= 20;
-
-                          // show and place the tooltip.
-                          popup.style.display = 'block';
-                          popup.style.top = posDOM.y + 'px';
-                          popup.style.left = posDOM.x + 'px';
-                      }
                   
 
 
