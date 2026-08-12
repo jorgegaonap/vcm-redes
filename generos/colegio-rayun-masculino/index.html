@@ -259,6 +259,25 @@ function highlightFilter(filter) {
              
 
              
+             /* position absolute is important and the container has to be relative or absolute as well. */
+          div.popup {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 display:none;
+                 background-color:#f5f4ed;
+                 -moz-border-radius: 3px;
+                 -webkit-border-radius: 3px;
+                 border-radius: 3px;
+                 border: 1px solid #808074;
+                 box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+          }
+
+          /* hide the original tooltip */
+          .vis-tooltip {
+            display:none;
+          }
+             
         </style>
     </head>
 
@@ -303,7 +322,7 @@ function highlightFilter(filter) {
                   
 
                   // parsing and collecting nodes and edges from the python
-                  nodes = new vis.DataSet([{"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:3heQu7YLQFf0WY4Z2giXhk", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0216f22f331f822af67bbfc400", "label": "Music Baby (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eMusic Baby\u003c/b\u003e\u003cbr\u003eJane Remover\u003cbr\u003en = 1", "x": 156.92432518870035, "y": 92.23780407186631}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:29M6802gdnONhtdsjPdtv9", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02ab0d83b752dcf9f2a7ddd51b", "label": "JRJRJR (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eJRJRJR\u003c/b\u003e\u003cbr\u003eJane Remover\u003cbr\u003en = 1", "x": 126.9544459084792, "y": -0.0}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:5Cc0Pe8p7c2OJxMj07ywvc", "image": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02ccd1887cc78b0bd55f54bbe1", "label": "Strangers (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eStrangers\u003c/b\u003e\u003cbr\u003eEthel Cain\u003cbr\u003en = 1", "x": 29.96987928022115, "y": -0.0}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:5Y6nVaayzitvsD5F7nr3DV", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e021624590458126fc8b8c64c2f", "label": "West Coast (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eWest Coast\u003c/b\u003e\u003cbr\u003eLana Del Rey\u003cbr\u003en = 1", "x": 78.46216259435018, "y": 149.24390203593316}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:0HmF7RjPsMMijGxgPXLQqy", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e020b68095c4016bdeabd032e89", "label": "harvest sky (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eharvest sky\u003c/b\u003e\u003cbr\u003eOklou\u003cbr\u003en = 1", "x": 0.0, "y": 92.23780407186631}]);
+                  nodes = new vis.DataSet([{"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:3heQu7YLQFf0WY4Z2giXhk", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0216f22f331f822af67bbfc400", "label": "Music Baby (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eMusic Baby\u003c/b\u003e\u003cbr\u003eJane Remover\u003cbr\u003en = 1\u003cbr\u003e\u003ca href=\u0027https://open.spotify.com/track/3heQu7YLQFf0WY4Z2giXhk?si=N1MrYKi1RT29A7MUf_J_Iw\u0026rowId=1ffeda051edadd0a\u0027 target=\u0027_blank\u0027 rel=\u0027noopener\u0027\u003eAbrir en Spotify\u003c/a\u003e", "x": 156.92432518870035, "y": 92.23780407186631}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:29M6802gdnONhtdsjPdtv9", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02ab0d83b752dcf9f2a7ddd51b", "label": "JRJRJR (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eJRJRJR\u003c/b\u003e\u003cbr\u003eJane Remover\u003cbr\u003en = 1\u003cbr\u003e\u003ca href=\u0027https://open.spotify.com/track/29M6802gdnONhtdsjPdtv9?si=3wk4qXR_QIGErrcbjSuU8A\u0026utm_source=copy-link\u0026rowId=2d465837970f18f8\u0027 target=\u0027_blank\u0027 rel=\u0027noopener\u0027\u003eAbrir en Spotify\u003c/a\u003e", "x": 126.9544459084792, "y": -0.0}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:5Cc0Pe8p7c2OJxMj07ywvc", "image": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02ccd1887cc78b0bd55f54bbe1", "label": "Strangers (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eStrangers\u003c/b\u003e\u003cbr\u003eEthel Cain\u003cbr\u003en = 1\u003cbr\u003e\u003ca href=\u0027https://open.spotify.com/track/5Cc0Pe8p7c2OJxMj07ywvc?si=OYiNGxQASIacfR8d-4zJHA\u0026utm_source=copy-link\u0026rowId=94721c8b6be81ce3\u0027 target=\u0027_blank\u0027 rel=\u0027noopener\u0027\u003eAbrir en Spotify\u003c/a\u003e", "x": 29.96987928022115, "y": -0.0}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:5Y6nVaayzitvsD5F7nr3DV", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e021624590458126fc8b8c64c2f", "label": "West Coast (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eWest Coast\u003c/b\u003e\u003cbr\u003eLana Del Rey\u003cbr\u003en = 1\u003cbr\u003e\u003ca href=\u0027https://open.spotify.com/track/5Y6nVaayzitvsD5F7nr3DV?si=nqeV3Vw-SICZmkLd-MJFiw\u0026utm_source=copy-link\u0026rowId=53d1acb74715dd8e\u0027 target=\u0027_blank\u0027 rel=\u0027noopener\u0027\u003eAbrir en Spotify\u003c/a\u003e", "x": 78.46216259435018, "y": 149.24390203593316}, {"borderWidth": 2, "color": {"border": "#121212"}, "font": {"color": "#121212"}, "id": "manual:0HmF7RjPsMMijGxgPXLQqy", "image": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e020b68095c4016bdeabd032e89", "label": "harvest sky (1)", "physics": false, "shape": "circularImage", "size": 40.0, "title": "\u003cb\u003eharvest sky\u003c/b\u003e\u003cbr\u003eOklou\u003cbr\u003en = 1\u003cbr\u003e\u003ca href=\u0027https://open.spotify.com/track/0HmF7RjPsMMijGxgPXLQqy?si=BMI6Z7hvSJqUEx7Nqji9-Q\u0026utm_source=copy-link\u0027 target=\u0027_blank\u0027 rel=\u0027noopener\u0027\u003eAbrir en Spotify\u003c/a\u003e", "x": 0.0, "y": 92.23780407186631}]);
                   edges = new vis.DataSet([{"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:3heQu7YLQFf0WY4Z2giXhk", "label": null, "to": "manual:29M6802gdnONhtdsjPdtv9", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:3heQu7YLQFf0WY4Z2giXhk", "label": null, "to": "manual:5Cc0Pe8p7c2OJxMj07ywvc", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:3heQu7YLQFf0WY4Z2giXhk", "label": null, "to": "manual:5Y6nVaayzitvsD5F7nr3DV", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:3heQu7YLQFf0WY4Z2giXhk", "label": null, "to": "manual:0HmF7RjPsMMijGxgPXLQqy", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:29M6802gdnONhtdsjPdtv9", "label": null, "to": "manual:5Cc0Pe8p7c2OJxMj07ywvc", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:29M6802gdnONhtdsjPdtv9", "label": null, "to": "manual:5Y6nVaayzitvsD5F7nr3DV", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:29M6802gdnONhtdsjPdtv9", "label": null, "to": "manual:0HmF7RjPsMMijGxgPXLQqy", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:5Cc0Pe8p7c2OJxMj07ywvc", "label": null, "to": "manual:5Y6nVaayzitvsD5F7nr3DV", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:5Cc0Pe8p7c2OJxMj07ywvc", "label": null, "to": "manual:0HmF7RjPsMMijGxgPXLQqy", "value": 1, "width": 0.6}, {"color": "rgba(29,185,84,0.15)", "font": {"color": "#1a5c2e", "size": 12, "strokeColor": "#FFFFFF", "strokeWidth": 3}, "from": "manual:5Y6nVaayzitvsD5F7nr3DV", "label": null, "to": "manual:0HmF7RjPsMMijGxgPXLQqy", "value": 1, "width": 0.6}]);
 
                   nodeColors = {};
@@ -328,6 +347,68 @@ function highlightFilter(filter) {
 
                   
 
+                  
+                  // make a custom popup
+                      var popup = document.createElement("div");
+                      popup.className = 'popup';
+                      popupTimeout = null;
+                      popup.addEventListener('mouseover', function () {
+                          console.log(popup)
+                          if (popupTimeout !== null) {
+                              clearTimeout(popupTimeout);
+                              popupTimeout = null;
+                          }
+                      });
+                      popup.addEventListener('mouseout', function () {
+                          if (popupTimeout === null) {
+                              hidePopup();
+                          }
+                      });
+                      container.appendChild(popup);
+
+
+                      // use the popup event to show
+                      network.on("showPopup", function (params) {
+                          showPopup(params);
+                      });
+
+                      // use the hide event to hide it
+                      network.on("hidePopup", function (params) {
+                          hidePopup();
+                      });
+
+                      // hiding the popup through css
+                      function hidePopup() {
+                          popupTimeout = setTimeout(function () { popup.style.display = 'none'; }, 500);
+                      }
+
+                      // showing the popup
+                      function showPopup(nodeId) {
+                          // get the data from the vis.DataSet
+                          var nodeData = nodes.get([nodeId]);
+                          popup.innerHTML = nodeData[0].title;
+
+                          // get the position of the node
+                          var posCanvas = network.getPositions([nodeId])[nodeId];
+
+                          // get the bounding box of the node
+                          var boundingBox = network.getBoundingBox(nodeId);
+
+                          //position tooltip:
+                          posCanvas.x = posCanvas.x + 0.5 * (boundingBox.right - boundingBox.left);
+
+                          // convert coordinates to the DOM space
+                          var posDOM = network.canvasToDOM(posCanvas);
+
+                          // Give it an offset
+                          posDOM.x += 10;
+                          posDOM.y -= 20;
+
+                          // show and place the tooltip.
+                          popup.style.display = 'block';
+                          popup.style.top = posDOM.y + 'px';
+                          popup.style.left = posDOM.x + 'px';
+                      }
                   
 
 
